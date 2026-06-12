@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Command Deck — Recruitment Workflow Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#100919;color:#fff;overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Navbar */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(16,9,25,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:700;background:linear-gradient(135deg,#f3c2ff,#8a2dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{color:#98A2B3;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:100px;font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;border:none;font-family:'Inter',sans-serif}
+.btn-primary{background:#FFC107;color:#100919;box-shadow:0 4px 14px rgba(255,193,7,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,193,7,0.4)}
+.btn-secondary{background:linear-gradient(135deg,#6d28d9,#853ACC);color:#fff;box-shadow:0 4px 14px rgba(109,40,217,0.3)}
+.btn-secondary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(109,40,217,0.4)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.2)}
+.btn-outline:hover{border-color:#FFC107;color:#FFC107}
+.btn-lg{padding:16px 36px;font-size:17px}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:80px;position:relative;overflow:hidden}
+.hero-content{text-align:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(38px,5vw,72px);font-weight:700;line-height:1.15;margin-bottom:20px}
+.hero h1 .purple{background:linear-gradient(90deg,#f3c2ff,#d87cff,#b84dff,#8a2dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 .amber{color:#FFC107}
+.hero p{font-size:clamp(16px,1.5vw,20px);color:#98A2B3;max-width:640px;margin:0 auto 36px;line-height:1.7}
+.hero-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero-stats{display:flex;justify-content:center;gap:48px;margin-top:60px;flex-wrap:wrap}
+.hero-stats .stat{text-align:center}
+.hero-stats .num{font-size:28px;font-weight:700;color:#FFC107}
+.hero-stats .label{font-size:13px;color:#98A2B3;margin-top:4px}
+
+/* Orb animation (roboapply-style) */
+.orb-wrapper{position:relative;width:280px;height:280px;margin:0 auto 40px}
+.ripple{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(180,60,255,0.3);opacity:0;animation:rippleOut 4s ease-out infinite}
+.ripple:nth-child(2){animation-delay:1.3s}
+.ripple:nth-child(3){animation-delay:2.6s}
+@keyframes rippleOut{0%{transform:scale(0.5);opacity:0.6}100%{transform:scale(1.4);opacity:0}}
+.pulse-ring{position:absolute;inset:30px;border-radius:50%;border:1px solid rgba(150,60,255,0.2);animation:pulseRing 4s ease-in-out infinite}
+@keyframes pulseRing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.4}}
+.orb-core{position:absolute;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(168,72,250,0.3),rgba(109,40,217,0.6),rgba(16,9,25,0.9));top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 60px rgba(168,72,250,0.2),0 0 120px rgba(109,40,217,0.1);animation:orbPulse 3s ease-in-out infinite}
+@keyframes orbPulse{0%,100%{box-shadow:0 0 60px rgba(168,72,250,0.2)}50%{box-shadow:0 0 80px rgba(168,72,250,0.4)}}
+.orb-center{position:absolute;width:24px;height:24px;border-radius:50%;background:#FFC107;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 30px rgba(255,193,7,0.4)}
+
+/* Sections */
+section{padding:100px 0}
+.section-label{display:inline-block;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#A048FA;margin-bottom:12px}
+.section-title{font-size:clamp(28px,3vw,42px);font-weight:700;margin-bottom:16px}
+.section-sub{font-size:17px;color:#98A2B3;max-width:560px;margin:0 auto 60px;text-align:center}
+.text-center{text-align:center}
+
+/* Trust bar */
+.trust-bar{padding:48px 0;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);text-align:center}
+.trust-bar p{font-size:13px;color:#98A2B3;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:24px}
+.trust-logos{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;align-items:center}
+.trust-logos span{font-size:14px;color:#475467;font-weight:600;padding:8px 24px;border:1px solid rgba(255,255,255,0.06);border-radius:8px}
+
+/* How it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.step-card{background:#16141a;border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:40px 28px;text-align:center;position:relative;transition:all .3s}
+.step-card:hover{border-color:rgba(255,193,7,0.3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.step-number{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6d28d9,#853ACC);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:18px;font-weight:700;color:#fff}
+.step-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#6d28d9,#853ACC);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px;color:#FFC107}
+.step-card h3{font-size:18px;font-weight:600;margin-bottom:12px}
+.step-card p{font-size:14px;color:#98A2B3;line-height:1.7}
+.step-arrow{display:flex;align-items:center;color:#475467;font-size:24px}
+
+/* Features */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature-card{background:#16141a;border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:32px 24px;transition:all .3s}
+.feature-card:hover{border-color:rgba(168,72,250,0.3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.feature-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(109,40,217,0.2),rgba(133,58,204,0.2));display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px;color:#FFC107}
+.feature-card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.feature-card p{font-size:13px;color:#98A2B3;line-height:1.7}
+.feature-tag{display:inline-block;font-size:11px;font-weight:600;color:#A048FA;background:rgba(160,72,250,0.1);padding:4px 10px;border-radius:100px;margin-bottom:12px}
+
+/* Pricing */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start}
+.pricing-card{background:#16141a;border:1px solid rgba(255,255,255,0.05);border-radius:20px;padding:40px 28px;position:relative;transition:all .3s}
+.pricing-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.pricing-card.featured{border-color:#FFC107;background:linear-gradient(135deg,#16141a,#1a1030);box-shadow:0 0 40px rgba(255,193,7,0.08)}
+.pricing-card.featured::before{content:'Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#FFC107;color:#100919;font-size:12px;font-weight:700;padding:4px 16px;border-radius:100px}
+.pricing-name{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#98A2B3;margin-bottom:8px}
+.pricing-price{font-size:48px;font-weight:700;margin-bottom:4px}
+.pricing-price span{font-size:16px;font-weight:400;color:#98A2B3}
+.pricing-desc{font-size:14px;color:#98A2B3;margin-bottom:24px}
+.pricing-features{list-style:none;margin-bottom:32px}
+.pricing-features li{font-size:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:10px}
+.pricing-features li i{color:#FFC107;font-size:14px}
+.pricing-features li.disabled i{color:#475467}
+.pricing-features li.disabled{color:#475467}
+
+/* Testimonials */
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testimonial-card{background:#16141a;border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:32px 24px;transition:all .3s}
+.testimonial-card:hover{border-color:rgba(255,193,7,0.2)}
+.testimonial-stars{color:#FFC107;margin-bottom:16px;font-size:14px}
+.testimonial-quote{font-size:14px;color:#98A2B3;line-height:1.8;margin-bottom:20px;font-style:italic}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.testimonial-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6d28d9,#853ACC);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.testimonial-name{font-size:14px;font-weight:600}
+.testimonial-title{font-size:12px;color:#98A2B3}
+
+/* CTA Section */
+.cta-section{background:linear-gradient(135deg,rgba(255,193,7,0.04),rgba(109,40,217,0.08));border:1px solid rgba(255,193,7,0.1);border-radius:24px;max-width:720px;margin:0 auto;padding:60px}
+.cta-section h2{font-size:clamp(24px,2.5vw,36px);font-weight:700;margin-bottom:12px;text-align:center}
+.cta-section p{text-align:center;color:#98A2B3;margin-bottom:32px}
+.form-group{margin-bottom:20px}
+.form-group input,.form-group select{width:100%;padding:14px 18px;border-radius:12px;border:1.5px solid rgba(255,193,7,0.2);background:transparent;color:#fff;font-size:15px;font-family:'Inter',sans-serif;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#FFC107}
+.form-group input::placeholder{color:#475467}
+.form-group select option{background:#100919;color:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.btn-full{width:100%;justify-content:center;padding:16px;font-size:16px}
+.form-note{text-align:center;font-size:13px;color:#475467;margin-top:12px}
+
+/* Footer */
+footer{background:#100919;border-top:1px solid rgba(255,255,255,0.05);padding:64px 0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+footer h4{font-size:14px;font-weight:600;margin-bottom:16px}
+footer p,footer a{font-size:13px;color:#98A2B3;line-height:2;display:block}
+footer a:hover{color:#FFC107}
+.footer-bottom{padding-top:24px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-bottom p{font-size:12px;color:#475467}
+.social-links{display:flex;gap:16px}
+.social-links a{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#98A2B3;transition:all .2s}
+.social-links a:hover{color:#FFC107;border-color:#FFC107}
+
+/* Responsive */
+@media(max-width:768px){
+.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#100919;border-bottom:1px solid rgba(255,255,255,0.05);padding:16px 24px;flex-direction:column;gap:16px;align-items:flex-start}
+.nav-links.open{display:flex}
+.mobile-toggle{display:block}
+.steps,.features-grid,.pricing-grid,.testimonials-grid{grid-template-columns:1fr}
+.form-row{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr 1fr}
+.cta-section{padding:32px 20px}
+.hero-stats{gap:24px}
+.trust-logos{gap:16px}
+}
+
+@media(max-width:480px){
+.footer-grid{grid-template-columns:1fr}
+.hero-buttons{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+<div class="container">
+<a href="#" class="logo">Agent Command Deck</a>
+<button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+<ul class="nav-links">
+<li><a href="#how-it-works">How It Works</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#pricing">Pricing</a></li>
+<li><a href="#demo" class="btn btn-primary" style="padding:8px 20px;font-size:13px">Book a Demo</a></li>
+</ul>
+</div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+<div class="container">
+<div class="hero-content">
+<div class="orb-wrapper">
+<div class="ripple"></div><div class="ripple"></div><div class="ripple"></div>
+<div class="pulse-ring"></div>
+<div class="orb-core"><div class="orb-center"></div></div>
+</div>
+<h1><span class="purple">Stop Screening.</span> <span class="amber">Start Hiring.</span></h1>
+<p>AI-powered candidate intake that parses, scores, and ranks every CV so your recruiters only see the top matches.</p>
+<div class="hero-buttons">
+<a href="#demo" class="btn btn-primary btn-lg"><i class="fas fa-calendar"></i> Book a Demo</a>
+<a href="#how-it-works" class="btn btn-outline btn-lg"><i class="fas fa-play-circle"></i> See How It Works</a>
+</div>
+<div class="hero-stats">
+<div class="stat"><div class="num">23h→4h</div><div class="label">weekly saved per recruiter</div></div>
+<div class="stat"><div class="num">94%</div><div class="label">scoring accuracy</div></div>
+<div class="stat"><div class="num">3min</div><div class="label">from signup to first score</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Trust Bar -->
+<div class="trust-bar">
+<div class="container">
+<p>Trusted by recruiting teams at</p>
+<div class="trust-logos">
+<span>TechRecruit Inc.</span>
+<span>HireFast Staffing</span>
+<span>TalentOps.ai</span>
+<span>RecruitLab</span>
+<span>GlobalHire</span>
+<span>NextGen TA</span>
+</div>
+</div>
+</div>
+
+<!-- How It Works -->
+<section id="how-it-works">
+<div class="container text-center">
+<div class="section-label">How It Works</div>
+<h2 class="section-title">From CV to shortlist in <span style="color:#FFC107">under 60 seconds</span></h2>
+<p class="section-sub">Three steps. One continuous pipeline. Everything between intake and approval is automated.</p>
+<div class="steps">
+<div class="step-card">
+<div class="step-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+<h3>Upload CV</h3>
+<p>Email forward, drag-and-drop upload, or webhook from your ATS. We handle every format.</p>
+</div>
+<div style="display:flex;align-items:center;justify-content:center;color:#475467;font-size:28px"><i class="fas fa-arrow-right"></i></div>
+<div class="step-card">
+<div class="step-icon"><i class="fas fa-brain"></i></div>
+<h3>AI Scores</h3>
+<p>Parsed, normalized, and scored against your specific job requirements. Skill gaps identified.</p>
+</div>
+<div style="display:flex;align-items:center;justify-content:center;color:#475467;font-size:28px"><i class="fas fa-arrow-right"></i></div>
+<div class="step-card">
+<div class="step-icon"><i class="fas fa-check-circle"></i></div>
+<h3>Recruiters Approve</h3>
+<p>One-click approve or reject. Auto-generate outreach or push to ATS. Done.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Features -->
+<section id="features" style="background:#0d0718">
+<div class="container text-center">
+<div class="section-label">Features</div>
+<h2 class="section-title">Everything you need to <span style="color:#A048FA">hire faster</span></h2>
+<p class="section-sub">Not a dashboard. Not a database. A complete intake-to-approval pipeline.</p>
+<div class="features-grid">
+<div class="feature-card"><div class="feature-tag">Intake</div><div class="feature-icon"><i class="fas fa-inbox"></i></div><h3>Smart CV Intake</h3><p>Upload, email forward, ATS webhook, or API. Every CV parsed into a structured profile in seconds.</p></div>
+<div class="feature-card"><div class="feature-tag">Triage</div><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>AI Scoring</h3><p>Match %, skill gap analysis, experience level. Scored against your specific job requirements.</p></div>
+<div class="feature-card"><div class="feature-tag">Review</div><div class="feature-icon"><i class="fas fa-columns"></i></div><h3>Kanban Board</h3><p>Drag-drop prioritization. Bulk approve or reject. See the whole pipeline at a glance.</p></div>
+<div class="feature-card"><div class="feature-tag">Actions</div><div class="feature-icon"><i class="fas fa-envelope"></i></div><h3>Auto Outreach</h3><p>One-click generate personalized emails or LinkedIn InMails. Templates + AI personalization.</p></div>
+<div class="feature-card"><div class="feature-tag">Integration</div><div class="feature-icon"><i class="fas fa-plug"></i></div><h3>ATS Connect</h3><p>Push approved candidates to Greenhouse, Lever, or Ashby. CSV export for everything else.</p></div>
+<div class="feature-card"><div class="feature-tag">Team</div><div class="feature-icon"><i class="fas fa-users"></i></div><h3>Team Workspace</h3><p>Multi-user, role-based access, shared views, activity feed. Your whole team on the same board.</p></div>
+</div>
+</div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+<div class="container text-center">
+<div class="section-label">Pricing</div>
+<h2 class="section-title">Simple pricing. <span style="color:#FFC107">Real results.</span></h2>
+<p class="section-sub">Cut screening time by 80% for less than the cost of one billable hour.</p>
+<div class="pricing-grid">
+<div class="pricing-card">
+<div class="pricing-name">Starter</div>
+<div class="pricing-price">$99<span>/mo</span></div>
+<div class="pricing-desc">For solo recruiters and small teams</div>
+<ul class="pricing-features">
+<li><i class="fas fa-check"></i> 100 CVs processed per month</li>
+<li><i class="fas fa-check"></i> Basic AI scoring</li>
+<li><i class="fas fa-check"></i> Kanban board</li>
+<li><i class="fas fa-check"></i> 1 user seat</li>
+<li><i class="fas fa-check"></i> CSV export</li>
+<li class="disabled"><i class="fas fa-times"></i> API access</li>
+<li class="disabled"><i class="fas fa-times"></i> AI triage / ranking</li>
+</ul>
+<a href="#demo" class="btn btn-primary btn-full">Start Free Trial</a>
+</div>
+<div class="pricing-card featured">
+<div class="pricing-name">Growth</div>
+<div class="pricing-price">$299<span>/mo</span></div>
+<div class="pricing-desc">For growing TA departments</div>
+<ul class="pricing-features">
+<li><i class="fas fa-check"></i> 500 CVs processed per month</li>
+<li><i class="fas fa-check"></i> Advanced AI scoring + skill gap analysis</li>
+<li><i class="fas fa-check"></i> Auto-ranked Kanban board</li>
+<li><i class="fas fa-check"></i> 5 user seats</li>
+<li><i class="fas fa-check"></i> REST API access</li>
+<li><i class="fas fa-check"></i> ATS integrations (GH, Lever, Ashby)</li>
+<li><i class="fas fa-check"></i> Priority support (chat + email)</li>
+</ul>
+<a href="#demo" class="btn btn-primary btn-full">Start Free Trial</a>
+</div>
+<div class="pricing-card">
+<div class="pricing-name">Enterprise</div>
+<div class="pricing-price">Custom</div>
+<div class="pricing-desc">For full-scale ops and staffing agencies</div>
+<ul class="pricing-features">
+<li><i class="fas fa-check"></i> Unlimited CV processing</li>
+<li><i class="fas fa-check"></i> Custom scoring rubrics</li>
+<li><i class="fas fa-check"></i> Unlimited user seats</li>
+<li><i class="fas fa-check"></i> Full API access</li>
+<li><i class="fas fa-check"></i> All integrations + custom</li>
+<li><i class="fas fa-check"></i> SSO / SAML</li>
+<li><i class="fas fa-check"></i> Dedicated Slack + phone (1h SLA)</li>
+</ul>
+<a href="#demo" class="btn btn-secondary btn-full">Contact Sales</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Testimonials -->
+<section style="background:#0d0718">
+<div class="container text-center">
+<div class="section-label">Testimonials</div>
+<h2 class="section-title">Trusted by <span style="color:#FFC107">recruiters who hire</span></h2>
+<p class="section-sub">Real results from real TA teams.</p>
+<div class="testimonials-grid">
+<div class="testimonial-card">
+<div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+<div class="testimonial-quote">"Cut our screening time from 20 hours to 4 hours per week. Time-to-interview dropped from 10 days to 2. My recruiters actually love this tool."</div>
+<div class="testimonial-author"><div class="testimonial-avatar">SK</div><div><div class="testimonial-name">Sarah Kim</div><div class="testimonial-title">TA Director, Fintech Co.</div></div></div>
+</div>
+<div class="testimonial-card">
+<div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+<div class="testimonial-quote">"Finally, a tool that understands what my recruiters actually need. The AI scoring is scary accurate — it catches candidates my team would've missed."</div>
+<div class="testimonial-author"><div class="testimonial-avatar">MR</div><div><div class="testimonial-name">Marcus Rivera</div><div class="testimonial-title">Head of Talent, SaaS Inc.</div></div></div>
+</div>
+<div class="testimonial-card">
+<div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+<div class="testimonial-quote">"We process 300+ CVs a week for our clients. This cut our triage time by 70%. No more spreadsheets, no more missed candidates."</div>
+<div class="testimonial-author"><div class="testimonial-avatar">JL</div><div><div class="testimonial-name">Jennifer Lee</div><div class="testimonial-title">Operations Lead, Staffing Agency</div></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CTA / Demo Booking -->
+<section id="demo">
+<div class="container">
+<div class="cta-section">
+<h2>Ready to cut screening time by <span style="color:#FFC107">80%</span>?</h2>
+<p>No credit card required. Setup takes 3 minutes.</p>
+<form id="demoForm" onsubmit="handleSubmit(event)">
+<div class="form-row">
+<div class="form-group"><input type="text" placeholder="Your name" required></div>
+<div class="form-group"><input type="email" placeholder="Work email" required></div>
+</div>
+<div class="form-row">
+<div class="form-group"><input type="text" placeholder="Company name" required></div>
+<div class="form-group"><select required><option value="">Team size</option><option>Just me</option><option>2-5</option><option>5-20</option><option>20+</option></select></div>
+</div>
+<div class="form-group">
+<select required><option value="">What's your biggest screening challenge?</option>
+<option>Too many CVs to review</option><option>Inconsistent scoring across my team</option><option>Slow time-to-interview</option><option>Tool sprawl / multiple systems</option><option>Other</option></select>
+</div>
+<button type="submit" class="btn btn-primary btn-full btn-lg"><i class="fas fa-calendar-check"></i> Book My Demo</button>
+<p class="form-note"><i class="fas fa-shield-alt"></i> Your data is safe. No spam. Ever.</p>
+</form>
+<div id="formSuccess" style="display:none;text-align:center;padding:20px">
+<i class="fas fa-check-circle" style="font-size:48px;color:#FFC107;margin-bottom:16px"></i>
+<h3 style="margin-bottom:8px">Thanks! You're booked.</h3>
+<p style="color:#98A2B3">We'll send you a calendar invite within 24 hours.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div><h4 style="font-size:18px;background:linear-gradient(135deg,#f3c2ff,#8a2dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px">Agent Command Deck</h4><p>Recruitment workflow automation. From CV intake to recruiter approval — one pipeline.</p></div>
+<div><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#demo">Book a Demo</a><a href="#">Changelog</a></div>
+<div><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div>
+<div><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">GDPR</a><a href="#">Security</a></div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2026 Agent Command Deck. All rights reserved.</p>
+<div class="social-links">
+<a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+<a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+<a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+<a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+function handleSubmit(e){e.preventDefault();document.getElementById('demoForm').style.display='none';document.getElementById('formSuccess').style.display='block'}
+</script>
+</body>
+</html>
